@@ -1,0 +1,9 @@
+pymongo==3.11.2
+mongoengine==0.22.1
+dnspython==2.0.0        # support for connecting to remote MongoDB
+python-dotenv==0.15.0   # support for environment variables
+Flask==1.1.2
+Flask-Cors==3.0.8
+Flask-RESTful==0.3.3
+pylint-django==2.4.1    # linter help
+Faker==4.0.3            # to install fake data
