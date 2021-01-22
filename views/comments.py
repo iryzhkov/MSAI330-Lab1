@@ -5,27 +5,49 @@ import models
 import json
 
 class CommentListEndpoint(Resource):
-    
+    def queryset_to_serialized_list(self, queryset):
+        serialized_list = [
+            item.to_dict() for item in queryset
+        ]
+        return serialized_list
+
     def get(self):
-        # TODO: implement GET endpoint
-        return Response(json.dumps([]), mimetype="application/json", status=200)
+        data = models.Comment.objects
+        # formatting the output JSON
+        data = self.queryset_to_serialized_list(data)
+        return Response(json.dumps(data), mimetype="application/json", status=200)
 
     def post(self):
-        # TODO: implement POST endpoint
-        return Response(json.dumps([]), mimetype="application/json", status=201)
-        
+        body = request.get_json()
+        comment = models.Comment(**body).save()
+        serialized_data = {
+            'id': str(comment.id),
+            'message': 'Comment {0} successfully created.'.format(post.id)
+        }
+        return Response(json.dumps(serialized_data), mimetype="application/json", status=201)
+
 class CommentDetailEndpoint(Resource):
     def put(self, id):
-        # TODO: implement PUT endpoint
-        return Response(json.dumps([]), mimetype="application/json", status=200)
-    
+        comment = models.Comment.objects.get(id=id)
+        request_data = request.get_json()
+        comment.comment = request_data.get('comment')
+        comment.author = request_data.get('author')
+        comment.post = request_data.get('post')
+        comment.save()
+        print(comment.to_json())
+        return Response(post.to_json(), mimetype="application/json", status=200)
+
     def delete(self, id):
-        # TODO: implement DELETE endpoint
-        return Response(json.dumps([]), mimetype="application/json", status=200)
+        comment = models.Comment.objects.get(id=id)
+        comment.delete()
+        serialized_data = {
+            'message': 'Comment {0} successfully deleted.'.format(id)
+        }
+        return Response(json.dumps(serialized_data), mimetype="application/json", status=200)
 
     def get(self, id):
-        # TODO: implement GET endpoint
-        return Response(json.dumps([]), mimetype="application/json", status=200)
+        post = models.Comment.objects.get(id=id)
+        return Response(post.to_json(), mimetype="application/json", status=200)
 
 def initialize_routes(api):
     api.add_resource(CommentListEndpoint, '/api/comments', '/api/comments/')

@@ -8,7 +8,6 @@ def get_path():
     return request.host_url + 'api/posts/'
 
 class PostListEndpoint(Resource):
-
     def queryset_to_serialized_list(self, queryset):
         serialized_list = [
             item.to_dict() for item in queryset
@@ -20,8 +19,8 @@ class PostListEndpoint(Resource):
         if keyword:
             # find data where *any of the fields contain the term...
             data = models.Post.objects.filter(
-                Q(title__icontains=keyword) | 
-                Q(content__icontains=keyword) | 
+                Q(title__icontains=keyword) |
+                Q(content__icontains=keyword) |
                 Q(author__icontains=keyword)
             )
         else:
@@ -39,7 +38,7 @@ class PostListEndpoint(Resource):
             'message': 'Post {0} successfully created.'.format(post.id)
         }
         return Response(json.dumps(serialized_data), mimetype="application/json", status=201)
-        
+
 class PostDetailEndpoint(Resource):
     def put(self, id):
         # body = request.get_json()
@@ -51,7 +50,7 @@ class PostDetailEndpoint(Resource):
         post.save()
         print(post.to_json())
         return Response(post.to_json(), mimetype="application/json", status=200)
-    
+
     def delete(self, id):
         post = models.Post.objects.get(id=id)
         post.delete()

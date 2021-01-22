@@ -26,7 +26,6 @@ posts.initialize_routes(api)
 comments.initialize_routes(api)
 
 
-
 if __name__ == "__main__":
     print('running!')
     app.run(debug=True)
