@@ -8,3 +8,4 @@ Flask-RESTful==0.3.3
 pylint-django==2.4.1    # linter help
 Faker==4.0.3            # to install fake data
 gunicorn
+flask-mongoengine
