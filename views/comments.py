@@ -12,6 +12,14 @@ class CommentListEndpoint(Resource):
         return serialized_list
 
     def get(self):
+        post_id = request.args.get('post_id')
+        if post_id:
+            # find data where *any of the fields contain the term...
+            data = models.Post.objects.filter(
+                Q(post__icontains=post_id)
+            )
+        else:
+            data = models.Post.objects
         data = models.Comment.objects
         # formatting the output JSON
         data = self.queryset_to_serialized_list(data)
@@ -22,7 +30,7 @@ class CommentListEndpoint(Resource):
         comment = models.Comment(**body).save()
         serialized_data = {
             'id': str(comment.id),
-            'message': 'Comment {0} successfully created.'.format(post.id)
+            'message': 'Comment {0} successfully created.'.format(comment.id)
         }
         return Response(json.dumps(serialized_data), mimetype="application/json", status=201)
 
