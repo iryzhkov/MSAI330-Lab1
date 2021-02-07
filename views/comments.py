@@ -13,14 +13,13 @@ class CommentListEndpoint(Resource):
 
     def get(self):
         post_id = request.args.get('post_id')
+        print(post_id)
         if post_id:
+            print("in the filtering")
             # find data where *any of the fields contain the term...
-            data = models.Post.objects.filter(
-                Q(post__icontains=post_id)
-            )
+            data = models.Comment.objects(post=post_id)
         else:
-            data = models.Post.objects
-        data = models.Comment.objects
+            data = models.Comment.objects
         # formatting the output JSON
         data = self.queryset_to_serialized_list(data)
         return Response(json.dumps(data), mimetype="application/json", status=200)
